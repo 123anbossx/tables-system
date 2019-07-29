@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import test from './test'
+import test from './first'
 Vue.use(Router);
 
 export default new Router({
@@ -8,7 +8,10 @@ export default new Router({
         {
             path: '/',
             name: 'login',
-            component: resolve => require(['../components/login.vue'], resolve)
+            component: resolve => require(['../components/login.vue'], resolve),
+            meta:{
+                login:true,
+            }
         },
         test
 

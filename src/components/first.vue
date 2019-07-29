@@ -1,5 +1,5 @@
 <template>
-    <div>这个是测试界面</div>
+    <div>这个是首页面</div>
 </template>
 
 <script>

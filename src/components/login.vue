@@ -4,13 +4,15 @@
        <div style="margin-top: 230px;    display: inline-block;">
            <div>
                <span class="loginText">登陆账号:</span>
-               <span><Input  placeholder="请输入登陆账号" style="width: 300px" /> </span>
+               <span><Input  placeholder="请输入登陆账号" style="width: 300px" v-model="user" /> </span>
            </div>
            <div style="margin-top: 30px">
                <span class="loginText">登陆密码:</span>
-               <span><Input  placeholder="请输入登陆密码" style="width: 300px" /></span>
+               <span><Input  placeholder="请输入登陆密码" style="width: 300px" v-model="password" /></span>
            </div>
-
+           <div style="margin-top: 10px">
+               <Button type="primary" @click="Logining">登陆</Button>
+           </div>
        </div>
        </div>
     </div>
@@ -18,7 +20,30 @@
 
 <script>
     export default {
-        name: "login"
+        name: "login",
+        data(){
+            return{
+                user:'',
+                password:'',
+            }
+        },
+        methods:{
+            setStorage(key,value){
+                let lastTime = new Date().getTime()+60*1000;
+                localStorage.setItem(key,JSON.stringify({user:value,lastTime:lastTime}))
+            },
+            Logining(){
+              this.axios.post('/login/webLogin',{
+                  user:this.user,
+                  password:this.password,
+              }).then((response)=>{
+                  if(response.data.code==200 && response.data.msg=='登陆成功'){
+                      this.setStorage('LoginMsg',this.user);
+                      this.$router.push('/first');
+                  }
+              })
+            }
+        }
     }
 </script>
 
