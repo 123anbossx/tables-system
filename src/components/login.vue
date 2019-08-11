@@ -25,11 +25,12 @@
             return{
                 user:'',
                 password:'',
+                firstUrl:'',
             }
         },
         methods:{
             setStorage(key,value){
-                let lastTime = new Date().getTime()+60*1000;
+                let lastTime = new Date().getTime()+60*60*1000;
                 localStorage.setItem(key,JSON.stringify({user:value,lastTime:lastTime}))
             },
             Logining(){
@@ -39,10 +40,33 @@
               }).then((response)=>{
                   if(response.data.code==200 && response.data.msg=='登陆成功'){
                       this.setStorage('LoginMsg',this.user);
-                      this.$router.push('/first');
+                      this.$router.push(this.firstUrl);
                   }
               })
-            }
+            },
+            getDaultPath(data){
+
+                    if(Array.isArray(data[0])){
+                        if(data[0][0].hasOwnProperty('children')){
+                            return this.digui(data[0][0].children)
+                        }else {
+                            return data[0][0].path;
+                        }
+
+                    }else {
+                        return data[0].path
+                    }
+
+            },
+        },
+        created(){
+           this.axios.post('/nav',{
+               key:['company']
+           }).then((response)=>{
+                 let list=response.data.data;
+                 let url=this.getDaultPath(list[0].children);
+                 this.firstUrl=url;
+           })
         }
     }
 </script>
